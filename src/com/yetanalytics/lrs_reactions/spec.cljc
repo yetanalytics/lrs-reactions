@@ -115,17 +115,17 @@
 (s/def ::created string?)
 (s/def ::modified string?)
 
-(s/def :lrsql.spec.reaction.error/type
+(s/def :reaction.error/type
   #{"ReactionQueryError"
     "ReactionTemplateError"
     "ReactionInvalidStatementError"})
 
-(s/def :lrsql.spec.reaction.error/message string?)
+(s/def :reaction.error/message string?)
 
 (s/def ::error
   (s/nilable
-   (s/keys :req-un [:lrsql.spec.reaction.error/type
-                    :lrsql.spec.reaction.error/message])))
+   (s/keys :req-un [:reaction.error/type
+                    :reaction.error/message])))
 
 (s/def ::title string?)
 
