@@ -109,12 +109,6 @@
                    ::conditions
                    ::template]))
 
-;; Representation
-(s/def ::id string?)
-(s/def ::active boolean?)
-(s/def ::created string?)
-(s/def ::modified string?)
-
 (s/def :reaction.error/type
   #{"ReactionQueryError"
     "ReactionTemplateError"
@@ -126,19 +120,3 @@
   (s/nilable
    (s/keys :req-un [:reaction.error/type
                     :reaction.error/message])))
-
-(s/def ::title string?)
-
-(s/def ::reaction
-  (s/keys :req-un [::id
-                   ::title
-                   ::ruleset
-                   ::active
-                   ::created
-                   ::modified
-                   ::error]))
-
-(s/def ::new-reaction
-  (s/keys :req-un [::title
-                   ::ruleset
-                   ::active]))
