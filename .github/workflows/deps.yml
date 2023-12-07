@@ -25,6 +25,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-deps-
       - name: Force pom generation
-        run: make ci
+        run: make target
       - name: Submit Dependency Snapshot
         uses: advanced-security/maven-dependency-submission-action@v3
