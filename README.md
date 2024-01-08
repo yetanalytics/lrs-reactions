@@ -29,6 +29,6 @@ Your library will be deployed to com.yetanalytics/lrs-reactions on clojars.org b
 
 ## License
 
-Copyright © 2023 Yet Analytics, Inc.
+Copyright © 2023-2024 Yet Analytics, Inc.
 
 Distributed under the Apache License version 2.0.
