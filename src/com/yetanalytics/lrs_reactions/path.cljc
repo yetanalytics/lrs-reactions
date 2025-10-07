@@ -74,12 +74,14 @@
 
 ;; xAPI 2.0.0
 (def pathmap-context-agent
-  {"objectType" 'string,
-   "agent"      pathmap-agent})
+  {"objectType"    'string,
+   "agent"         pathmap-agent,
+   "relevantTypes" ['string]})
 
 (def pathmap-context-group
-  {"objectType" 'string,
-   "group"      pathmap-group})
+  {"objectType"    'string,
+   "group"         pathmap-group,
+   "relevantTypes" ['string]})
 
 (def pathmap-context-2
   (assoc pathmap-context
