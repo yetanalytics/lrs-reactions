@@ -124,3 +124,33 @@
                              :leaf-type nil,
                              :valid?    false
                              :complete? true}))
+
+(deftest xapi-2-test
+  (are [path xapi-version result]
+       (= (analyze-path path :xapi-version xapi-version)
+          result)
+    ["context"
+     "contextAgents"] "1.0.3" {:next-keys [],
+                               :leaf-type nil,
+                               :valid? false,
+                               :complete? true}
+    ["context"
+     "contextAgents"] "2.0.0" {:next-keys ['idx],
+                               :leaf-type nil,
+                               :valid? true,
+                               :complete? false}
+    ["context"
+     "contextGroups"
+     0
+     "group"
+     "member"
+     0]               "2.0.0" {:next-keys
+                               ["account"
+                                "name"
+                                "mbox"
+                                "openid"
+                                "mbox_sha1sum"
+                                "objectType"],
+                               :leaf-type nil,
+                               :valid? true,
+                               :complete? false}))
