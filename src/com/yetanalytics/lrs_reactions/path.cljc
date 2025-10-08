@@ -72,6 +72,24 @@
    "statement"    pathmap-statement-ref,
    "revision"     'string})
 
+;; xAPI 2.0.0
+(def pathmap-context-agent
+  {"objectType"    'string,
+   "agent"         pathmap-agent,
+   "relevantTypes" ['string]})
+
+(def pathmap-context-group
+  {"objectType"    'string,
+   "group"         pathmap-group,
+   "relevantTypes" ['string]})
+
+(def pathmap-context-2
+  (assoc pathmap-context
+         "contextAgents"
+         [pathmap-context-agent]
+         "contextGroups"
+         [pathmap-context-group]))
+
 (def pathmap-result
   {"score"
    {"raw" 'number, "max" 'number, "min" 'number, "scaled" 'number},
@@ -128,8 +146,16 @@
         path))
 
 (defn analyze-path*
-  [path]
-  (let [ret       (get-in pathmap-statement
+  [path & {:keys [xapi-version]
+           :or   {xapi-version "1.0.3"}}]
+  (let [;; version dispatch
+        pathmap-statement
+        (case xapi-version
+          "1.0.3" pathmap-statement
+          "2.0.0" (merge pathmap-statement
+                         {"context" pathmap-context-2})
+          pathmap-statement)
+        ret       (get-in pathmap-statement
                           (zero-indices path))
         ;; lmaps and extensions
         [?p-idx ?p-leaf-type]

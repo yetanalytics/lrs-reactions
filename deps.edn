@@ -1,6 +1,6 @@
 {:paths ["src" "resources"]
  :deps {org.clojure/clojure {:mvn/version "1.11.1"}
-        com.yetanalytics/xapi-schema {:mvn/version "1.2.1"
+        com.yetanalytics/xapi-schema {:mvn/version "1.4.1"
                                       :exclustions [org.clojure/clojure
                                                     org.clojure/clojurescript
                                                     org.clojure/data.json]}}
