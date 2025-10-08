@@ -1,7 +1,7 @@
 (ns com.yetanalytics.lrs-reactions.spec-test
   (:require [clojure.test :refer [deftest are testing]]
-            [clojure.spec.alpha :as s]
-            [com.yetanalytics.lrs-reactions.spec :as rs]))
+            [com.yetanalytics.lrs-reactions.spec :as rs]
+            [xapi-schema.spec :as xs]))
 
 (deftest valid-like-val-test
   (testing "validates value in case of like op"
@@ -16,6 +16,24 @@
        :val [:number 1]} false
       ;; invalid ref path type
       {:path ["id"]
+       :op "like"
+       :ref {:condition "whatever"
+             :path ["result" "score" "scaled"]}} false)))
+
+(deftest valid-like-val-2-test
+  (testing "validates value in case of like op (xAPI 2.0.0)"
+    (are [clause result]
+         (binding [xs/*xapi-version* "2.0.0"]
+           (= result (true? (rs/valid-like-val? clause))))
+      {:path ["context" "contextAgents" 0 "relevantTypes" 0]
+       :op "like"
+       :val [:string "https://example.org/friend"]} true
+      ;; invalid val type
+      {:path ["context" "contextAgents" 0 "relevantTypes" 0]
+       :op "like"
+       :val [:number 1]} false
+      ;; invalid ref path type
+      {:path ["context" "contextAgents" 0 "relevantTypes" 0]
        :op "like"
        :ref {:condition "whatever"
              :path ["result" "score" "scaled"]}} false)))
@@ -48,6 +66,19 @@
        :ref {:condition "whatever"
              :path ["id"]}} false)))
 
+(deftest valid-clause-path-2-test
+  (testing "validates logic clause paths (xAPI 2.0.0)"
+    (are [clause result]
+         (binding [xs/*xapi-version* "2.0.0"]
+           (= result (true? (rs/valid-clause-path? clause))))
+      {:path ["context" "contextAgents" 0 "agent" "name"],
+       :op "eq",
+       :val [:string "Bob"]} true
+      ;; incomplete path
+      {:path ["context" "contextAgents" 0 "agent"],
+       :op "eq",
+       :val [:string "bob"]} false)))
+
 (deftest valid-identity-path-test
   (testing "validates identity paths"
     (are [path result]
@@ -57,3 +88,12 @@
       ["object"] false
       ;; not xapi
       ["foo"] false)))
+
+(deftest valid-identity-path-2-test
+  (testing "validates identity paths"
+    (are [path result]
+         (binding [xs/*xapi-version* "2.0.0"]
+           (= result (rs/valid-identity-path? path)))
+      ["context" "contextAgents" 0 "agent" "mbox"] true
+      ;; incomplete
+      ["context" "contextAgents" 0 "agent"] false)))

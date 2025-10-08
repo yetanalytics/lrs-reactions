@@ -40,7 +40,9 @@
            val]}]
   (if (= op "like")
     (if-let [{ref-path :path} ref]
-      (let [{:keys [leaf-type]} (path/analyze-path ref-path)]
+      (let [{:keys [leaf-type]} (path/analyze-path
+                                 ref-path
+                                 :xapi-version xs/*xapi-version*)]
         (= 'string leaf-type))
       (= :string
          (first val)))
@@ -54,7 +56,9 @@
   (if path
     (let [{:keys [valid?
                   leaf-type
-                  next-keys]} (path/analyze-path path)]
+                  next-keys]} (path/analyze-path
+                               path
+                               :xapi-version xs/*xapi-version*)]
       (and valid?
            (if (= "contains" op)
              (or (= '[idx] next-keys) (= 'json leaf-type))
@@ -63,7 +67,9 @@
                    (= 'json leaf-type) ;; anything goes
                    (if-let [{ref-path :path} ref]
                      (let [{ref-leaf-type :leaf-type}
-                           (path/analyze-path ref-path)]
+                           (path/analyze-path
+                            ref-path
+                            :xapi-version xs/*xapi-version*)]
                        (= leaf-type ref-leaf-type))
                      (= (name leaf-type)
                         (name (first val)))))))))
@@ -95,7 +101,8 @@
 
 (defn valid-identity-path?
   [path]
-  (some? (:leaf-type (path/analyze-path path))))
+  (some? (:leaf-type (path/analyze-path path
+                                        :xapi-version xs/*xapi-version*))))
 
 (s/def ::identityPaths
   (s/every (s/and ::path
