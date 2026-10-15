@@ -11,3 +11,8 @@ install: target
 
 clean:
 	rm -rf target
+
+.PHONY: pom.xml
+
+pom.xml:
+	clojure -X:deps mvn-pom :user nil
