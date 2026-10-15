@@ -27,6 +27,24 @@ variables (requires the `ci` task be run first):
 
 Your library will be deployed to com.yetanalytics/lrs-reactions on clojars.org by default.
 
+## Dependency vulnerability tracking
+
+The `Deps` workflow regenerates the root `pom.xml` from `deps.edn` and submits
+the Maven dependency tree to GitHub's dependency graph on pushes to `main`.
+It can also be run manually. Dependabot uses this graph to check for known
+vulnerabilities.
+
+Run `make pom.xml` to regenerate the submission POM locally, retaining its
+project metadata and excluding local user dependency configuration. The root
+POM is tracked, so local generation can leave changes in the working tree.
+The workflow submits this root POM; the build's POM under `target/classes` is
+used separately for packaging.
+
+The snapshot is associated with `deps.edn` and covers the base Clojure and
+`xapi-schema` dependencies and their transitive Maven dependencies. The `:build`
+and `:test` aliases are excluded, including deployment/build tools, `test.check`,
+and the Git-based Cognitect test runner. These require separate coverage.
+
 ## License
 
 Copyright © 2023-2025 Yet Analytics, Inc.
